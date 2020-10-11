@@ -176,7 +176,6 @@ def move_block(pub_cmd, loop_rate, start_loc, start_height, \
     global Q
 
     ### Hint: Use the Q array to map out your towers by location and "height".
-    #move_arm(pub_cmd, loop_rate, home, 4.0, 4.0)
     move_arm(pub_cmd, loop_rate, Q[start_loc][start_height][1], 4.0,4.0)
     move_arm(pub_cmd, loop_rate, Q[start_loc][start_height][0], 4.0,4.0)
 
@@ -190,17 +189,17 @@ def move_block(pub_cmd, loop_rate, start_loc, start_height, \
     move_arm(pub_cmd, loop_rate, Q[end_loc][end_height][0], 4.0, 4.0)
     gripper(pub_cmd, loop_rate, suction_off)
     move_arm(pub_cmd, loop_rate, Q[end_loc][end_height][1], 4.0, 4.0)
-    #move_arm(pub_cmd, loop_rate, home, 4.0, 4.0)
     return error
 
 # Function: ToH
-# Purpose: Solves the Tower of Hanoi problem recursively
+# Purpose: Solves the Tower of Hanoi problem iteratively
 # Inputs: n - number of disks
 #         src - source peg;
 #         tmp - temporary peg
 #         dst - destination peg
 #         alt - an array of the form [src, temp, dest]
-#def ToH(n, src, src_alt, tmp, tmp_alt, dst, dst_alt, pub_cmd, loop_rate):
+#         pub_cmd - same as the public command for ros
+#         loop_rate
 def ToH(n, src, tmp, dst, alt, pub_cmd, loop_rate):
     move_block(pub_cmd, loop_rate, src, alt[0], dst, alt[2]+1)
     move_block(pub_cmd, loop_rate, src, alt[0]-1, tmp, alt[1]+1)
@@ -351,33 +350,38 @@ def main():
             # It is necessary to check which is the ending tower so as to call
             #   ToH solver on the correct, src, dst, tmp altitudes
             # See ToH for more detail on the order of inputs
-            if end == 1: # temp is 2
-                #ToH(n,start,alt0, temp, alt2, end, alt1, pub_command, loop_rate)
+            
+            #temp is 2
+            if end == 1:
                 # alt is an array of the form [start, tmp, dst]
                 alt = [alt0, alt2, alt1]
                 ToH(n,start,temp,end, alt, pub_command, loop_rate)
-            else: # temp is 1
-                #ToH(n,start,alt0, temp, alt1, end, alt2, pub_command, loop_rate)
+            
+            # temp is 1
+            else:
                 alt = [alt0, alt1, alt2]
                 ToH(n,start, temp, end, alt, pub_command, loop_rate)
+
         elif start == 1:
             alt0 = -1; alt1 = 2; alt2 = -1;
-            if end == 0: # temp is 2
-                #ToH(n,start,alt1, temp, alt2, end, alt0, pub_command, loop_rate)
+            # temp is 2
+            if end == 0: 
                 alt = [alt1, alt2, alt0]
                 ToH(n,start,temp, end, alt, pub_command, loop_rate)
-            else: # temp is 0
-                #ToH(n,start,alt1, temp, alt0, end, alt2, pub_command, loop_rate)
+            
+             # temp is 0
+            else:
                 alt = [alt1, alt0, alt2]
                 ToH(n,start, temp, end, alt, pub_command, loop_rate)
+        # start is 2
         else:
             alt0 = -1; alt1 = -1; alt2 = 2;
-            if end == 0: # temp is 1
-                #ToH(n,start,alt2, temp, alt1, end, alt0, pub_command, loop_rate)
+            # temp is 1
+            if end == 0:
                 alt = [alt2, alt1, alt0]
                 ToH(n,start, temp,  end, alt, pub_command, loop_rate)
-            else: # temp is 0
-                #ToH(n,start,alt2, temp, alt0, end, alt1, pub_command, loop_rate)
+             # temp is 0
+            else:
                 alt = [alt2, alt0, alt1]
                 ToH(n,start, temp,  end, alt, pub_command, loop_rate)
 
@@ -387,11 +391,7 @@ def main():
 
     #gripper(pub_command, loop_rate, suction_off)
 
-
-
     ############### Your Code End Here ###############
-
-
 if __name__ == '__main__':
 
     try:

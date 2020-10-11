@@ -326,9 +326,7 @@ def main():
     ############### Your Code End Here ###############
 
     # Check if ROS is ready for operation
-    running = 1
     while(rospy.is_shutdown()):
-        running = 0
         print("ROS is shutdown!")
 
     rospy.loginfo("Sending Goals ...")
@@ -337,59 +335,57 @@ def main():
 
     ############## Your Code Start Here ##############
     # TODO: modify the code so that UR3 can move tower accordingly from user input
-    if(running):
-        move_arm(pub_command, loop_rate, home, 4.0,4.0)
-    while(running):
-        if start is None or end is None:
-            print('Error in input')
-            sys.quit()
-        # set altitudes for each tower based on start and end
-        if start == 0:
-            alt0 = 2; alt1 = -1; alt2=-1;
 
-            # It is necessary to check which is the ending tower so as to call
-            #   ToH solver on the correct, src, dst, tmp altitudes
-            # See ToH for more detail on the order of inputs
-            
-            #temp is 2
-            if end == 1:
-                # alt is an array of the form [start, tmp, dst]
-                alt = [alt0, alt2, alt1]
-                ToH(n,start,temp,end, alt, pub_command, loop_rate)
-            
-            # temp is 1
-            else:
-                alt = [alt0, alt1, alt2]
-                ToH(n,start, temp, end, alt, pub_command, loop_rate)
+    move_arm(pub_command, loop_rate, home, 4.0,4.0)
+    if start is None or end is None:
+        print('Error in input')
+        sys.quit()
+    # set altitudes for each tower based on start and end
+    if start == 0:
+        alt0 = 2; alt1 = -1; alt2=-1;
 
-        elif start == 1:
-            alt0 = -1; alt1 = 2; alt2 = -1;
-            # temp is 2
-            if end == 0: 
-                alt = [alt1, alt2, alt0]
-                ToH(n,start,temp, end, alt, pub_command, loop_rate)
-            
-             # temp is 0
-            else:
-                alt = [alt1, alt0, alt2]
-                ToH(n,start, temp, end, alt, pub_command, loop_rate)
-        # start is 2
+        # It is necessary to check which is the ending tower so as to call
+        #   ToH solver on the correct, src, dst, tmp altitudes
+        # See ToH for more detail on the order of inputs
+
+        #temp is 2
+        if end == 1:
+            # alt is an array of the form [start, tmp, dst]
+            alt = [alt0, alt2, alt1]
+            ToH(n,start,temp,end, alt, pub_command, loop_rate)
+
+        # temp is 1
         else:
-            alt0 = -1; alt1 = -1; alt2 = 2;
-            # temp is 1
-            if end == 0:
-                alt = [alt2, alt1, alt0]
-                ToH(n,start, temp,  end, alt, pub_command, loop_rate)
-             # temp is 0
-            else:
-                alt = [alt2, alt0, alt1]
-                ToH(n,start, temp,  end, alt, pub_command, loop_rate)
+            alt = [alt0, alt1, alt2]
+            ToH(n,start, temp, end, alt, pub_command, loop_rate)
 
-        move_arm(pub_command, loop_rate, home, 4.0, 4.0)
-        print('Done')
-        running = 0
+    elif start == 1:
+        alt0 = -1; alt1 = 2; alt2 = -1;
+        # temp is 2
+        if end == 0:
+            alt = [alt1, alt2, alt0]
+            ToH(n,start,temp, end, alt, pub_command, loop_rate)
 
-    #gripper(pub_command, loop_rate, suction_off)
+         # temp is 0
+        else:
+            alt = [alt1, alt0, alt2]
+            ToH(n,start, temp, end, alt, pub_command, loop_rate)
+    # start is 2
+    else:
+        alt0 = -1; alt1 = -1; alt2 = 2;
+        # temp is 1
+        if end == 0:
+            alt = [alt2, alt1, alt0]
+            ToH(n,start, temp,  end, alt, pub_command, loop_rate)
+         # temp is 0
+        else:
+            alt = [alt2, alt0, alt1]
+            ToH(n,start, temp,  end, alt, pub_command, loop_rate)
+
+    move_arm(pub_command, loop_rate, home, 4.0, 4.0)
+    print('Done')
+
+    gripper(pub_command, loop_rate, suction_off)
 
     ############### Your Code End Here ###############
 if __name__ == '__main__':

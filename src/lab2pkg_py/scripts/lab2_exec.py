@@ -180,7 +180,6 @@ def move_block(pub_cmd, loop_rate, start_loc, start_height, \
     move_arm(pub_cmd, loop_rate, Q[start_loc][start_height][0], 4.0,4.0)
 
     error = gripper(pub_cmd, loop_rate, suction_on)
-    time.slee(0.5)
     if not digital_in_0:
         move_arm(pub_cmd, loop_rate, home, 4.0,4.0)
         print('Gripper error')

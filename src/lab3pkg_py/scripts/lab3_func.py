@@ -43,7 +43,7 @@ def Get_MS():
 	S[2] = np.concatenate((w3, v3), axis=None)
 	S[3] = np.concatenate((w4, v4), axis=None)
 	S[4] = np.concatenate((w5, v5), axis=None)
-	S[5] = np.concatenate((w5, v5), axis=None)
+	S[5] = np.concatenate((w6, v6), axis=None)
 
 	M  = np.array([[0,-1, 0, 390  ],
 				   [0, 0,-1, 401  ],

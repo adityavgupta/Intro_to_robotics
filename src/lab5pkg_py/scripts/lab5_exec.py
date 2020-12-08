@@ -63,19 +63,12 @@ Whenever block_[color]/world publishes info these callback functions are called.
 """
 def block_green_world_callback(data):
     global green_world_position
-
-    green_world_position = Point()
-    green_world_position.x = data.x
-    green_world_position.y = data.y
-    green_world_position.z = data.z
+    green_world_position = [data.x, data.y, data.z]
+    
 
 def block_yellow_world_callback(data):
     global yellow_world_position
-
-    yellow_world_position = Point()
-    yellow_world_position.x = data.x
-    yellow_world_position.y = data.y
-    yellow_world_position.z = data.z
+    yellow_world_position = [data.x, data.y, data.z]
 
 ############### Your Code End Here ###############
 
@@ -313,15 +306,23 @@ if __name__ == '__main__':
     # Hint: Remember to delay for your subscriber to update
     # Otherwise you might get None or old images (when running lab 5 multiple times)
     # a short rospy.sleep(time in seconds) after you publish should be sufficient
-    while not rospy.is_shutdown():
-        if green_world_position is not None:
-            pub_block_green_pixel.publish(green_world_position)
-        if yellow_world_position is not None:
-            pub_block_yellow_pixel.publish(yellow_world_position)
-        rospy.sleep(5)
 
+    # publish
+    data_g = Point()
+    data_g.x = green_image_rc[0]
+    data_g.y = green_image_rc[1]
+    data_g.z = 0.015
+    pub_block_green_pixel.publish(data_g)
 
+    data_y = Point()
+    data_y.x = yellow_image_rc[0]
+    data_y.y = yellow_image_rc[1]
+    data_y.z = 0.015
+    pub_block_yellow_pixel.publish(data_y)
+    rospy.sleep(1)
 
+    print(yellow_world_position)
+    
     ############## Your Code End Here ###############
 
     # Move arm to away position

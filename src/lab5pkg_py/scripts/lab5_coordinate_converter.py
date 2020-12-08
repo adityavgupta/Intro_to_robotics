@@ -50,8 +50,8 @@ def IMG2W(r,c):
     O_wc = np.matmul(R_wc, O_cw)
 
     #world frame
-    xw = O_wc[0,0]
-    yw = O_wc[1,0]
+    xw = O_wc[0]
+    yw = O_wc[1]
     
     ################################# Your Code End Here #################################
     return xw, yw

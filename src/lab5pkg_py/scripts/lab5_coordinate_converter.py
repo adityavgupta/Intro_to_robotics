@@ -40,7 +40,7 @@ def IMG2W(r,c):
     y_c = (1/beta)*(c - O_c)
 
     # translate and rotate camera frame to get world frame
-    O_cw = np.transpose(np.array([tx + x_c, ty + y_c, 0]))
+    O_cw = np.transpose(np.array([-tx + x_c, -ty + y_c, 0]))
 
     R_cw = np.array([   [np.cos(theta), -np.sin(theta), 0],
                         [np.sin(theta),  np.cos(theta), 0],

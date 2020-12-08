@@ -217,10 +217,27 @@ def move_block(pub_cmd, loop_rate, start_xw_yw_zw, target_xw_yw_zw, vel, accel):
 
     """
 
-    # global variable1
-    # global variable2
+    s_pos = lab_invk(start_xw_yw_zw[0], start_xw_yw_zw[1], start_xw_yw_zw[2], 0)
+    s_pos_above = lab_invk(start_xw_yw_zw[0], start_xw_yw_zw[1], start_xw_yw_zw[2]+0.1, 0)
 
-    error = 0
+    e_pos = lab_invk(target_xw_yw_zw.x, target_xw_yw_zw.y, target_xw_yw_zw.z, 0)
+    e_pos_above = lab_invk(target_xw_yw_zw.x, target_xw_yw_zw.y, target_xw_yw_zw.z+0.1, 0)
+
+    move_arm(pub_cmd, loop_rate, s_pos_above, vel,accel)
+    move_arm(pub_cmd, loop_rate, s_pos, vel, accel)
+
+    error = gripper(pub_cmd, loop_rate, suction_on)
+    rospy.sleep(0.5)
+
+    if not digital_in_0:
+        move_arm(pub_cmd, loop_rate, go_away, vel, accel)
+        print('Gripper error')
+        sys.exit()
+    move_arm(pub_cmd, loop_rate, s_pos_above, vel,accel)
+    move_arm(pub_cmd, loop_rate, e_pos_above, vel,accel)
+    move_arm(pub_cmd, loop_rate, e_pos, vel,accel)
+    gripper(pub_cmd, loop_rate, suction_off)
+    move_arm(pub_cmd, loop_rate, e_pos_above, vel,accel)
 
     return error
 
@@ -320,9 +337,9 @@ if __name__ == '__main__':
     data_y.z = 0.015
     pub_block_yellow_pixel.publish(data_y)
     rospy.sleep(1)
-
-    print(yellow_world_position)
     
+    move_block(pub_command, loop_rate, green_world_position, green_world_goal, vel, accel)
+    move_block(pub_command, loop_rate, yellow_world_position, yellow_world_goal, vel, accel)
     ############## Your Code End Here ###############
 
     # Move arm to away position

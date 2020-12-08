@@ -120,11 +120,12 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	x3end = xcen - l07*np.cos(thetas[0])+(l06+0.027)*np.sin(thetas[0])
 	y3end = ycen - l07*np.sin(thetas[0])-(l06+0.027)*np.cos(thetas[0])
 	z3end = l08+l10+zcen
+	print(y3end, z3end)
 
 	d = z3end - l01
 	R = np.linalg.norm(np.array([x3end,y3end,d])-np.array([0,0,0]))
 	R = np.sqrt(x3end**2+y3end**2+d**2)
-	
+
 
 	alpha = np.arcsin(d/R)
 	beta = np.arccos((R**2+l03**2-l05**2)/(2*l03*R))
@@ -137,6 +138,5 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 
 
 	print("theta1 to theta6: " + str(thetas) + "\n")
-
 	return lab_fk(float(thetas[0]), float(thetas[1]), float(thetas[2]), \
 		          float(thetas[3]), float(thetas[4]), float(thetas[5]) )
